@@ -44,8 +44,6 @@ if ( is_admin() ) {
 add_action(
 	'init',
 	function () {
-		load_plugin_textdomain( 'nepali-date-kit', false, dirname( plugin_basename( NDK_FILE ) ) . '/languages' );
-
 		register_block_type(
 			NDK_DIR . 'blocks/today',
 			array(

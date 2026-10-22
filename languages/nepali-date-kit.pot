@@ -1,0 +1,265 @@
+# Copyright (C) 2026 Surya Bista
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Nepali Date Kit 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nepali-date-kit\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-22T15:34:27+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: nepali-date-kit\n"
+
+#. Plugin Name of the plugin
+#: nepali-date-kit.php
+msgid "Nepali Date Kit"
+msgstr ""
+
+#. Description of the plugin
+#: nepali-date-kit.php
+msgid "Bikram Sambat (BS) dates for WordPress: post dates in BS, today's date, and a BS ⇄ AD converter (shortcodes, widgets and a block)."
+msgstr ""
+
+#. Author of the plugin
+#: nepali-date-kit.php
+msgid "Surya Bista"
+msgstr ""
+
+#: includes/class-ndk-assets.php:30
+msgid "Could not convert this date."
+msgstr ""
+
+#: includes/class-ndk-settings.php:23
+#: includes/class-ndk-settings.php:24
+msgid "Nepali Date"
+msgstr ""
+
+#: includes/class-ndk-settings.php:34
+#: blocks/today/index.js:20
+msgid "Settings"
+msgstr ""
+
+#: includes/class-ndk-settings.php:50
+msgid "Display"
+msgstr ""
+
+#: includes/class-ndk-settings.php:51
+msgid "Post dates"
+msgstr ""
+
+#: includes/class-ndk-settings.php:53
+#: blocks/today/index.js:30
+msgid "Language"
+msgstr ""
+
+#: includes/class-ndk-settings.php:54
+msgid "Timezone"
+msgstr ""
+
+#: includes/class-ndk-settings.php:55
+msgid "Convert"
+msgstr ""
+
+#: includes/class-ndk-settings.php:56
+msgid "Post types"
+msgstr ""
+
+#: includes/class-ndk-settings.php:57
+msgid "Date format"
+msgstr ""
+
+#: includes/class-ndk-settings.php:58
+msgid "Relative dates"
+msgstr ""
+
+#: includes/class-ndk-settings.php:84
+msgid "That date format contains machine-only characters (such as c, r, U, T) and was not saved."
+msgstr ""
+
+#: includes/class-ndk-settings.php:99
+msgid "Replaces dates printed by your theme (get_the_date(), the_time() and friends) with Bikram Sambat dates. Machine-readable dates, such as datetime attributes and feeds, are always left in AD."
+msgstr ""
+
+#: includes/class-ndk-settings.php:112
+msgid "Nepal time (Asia/Kathmandu)"
+msgstr ""
+
+#. translators: %s: site timezone name.
+#: includes/class-ndk-settings.php:114
+#, php-format
+msgid "Site timezone (%s)"
+msgstr ""
+
+#: includes/class-ndk-settings.php:122
+msgid "Published date"
+msgstr ""
+
+#: includes/class-ndk-settings.php:123
+msgid "Published time"
+msgstr ""
+
+#: includes/class-ndk-settings.php:124
+msgid "Modified date"
+msgstr ""
+
+#: includes/class-ndk-settings.php:125
+msgid "Modified time"
+msgstr ""
+
+#: includes/class-ndk-settings.php:161
+msgid "Leave empty to keep the format your theme asks for. Uses PHP date characters, e.g. \"l, j F Y\" or \"Y-m-d\"."
+msgstr ""
+
+#. translators: %s: example date.
+#: includes/class-ndk-settings.php:164
+#, php-format
+msgid "Today: %s"
+msgstr ""
+
+#: includes/class-ndk-settings.php:172
+msgid "Show \"३ दिन अगाडि\" for posts newer than"
+msgstr ""
+
+#: includes/class-ndk-settings.php:178
+msgid "days"
+msgstr ""
+
+#: includes/class-ndk-settings.php:205
+msgid "Shortcodes"
+msgstr ""
+
+#: includes/class-ndk-shortcodes.php:114
+msgid "BS to AD"
+msgstr ""
+
+#: includes/class-ndk-shortcodes.php:114
+msgid "Convert to AD"
+msgstr ""
+
+#: includes/class-ndk-shortcodes.php:115
+msgid "AD to BS"
+msgstr ""
+
+#: includes/class-ndk-shortcodes.php:115
+msgid "Convert to BS"
+msgstr ""
+
+#: includes/class-ndk-shortcodes.php:128
+msgid "Year"
+msgstr ""
+
+#: includes/class-ndk-shortcodes.php:134
+msgid "Month"
+msgstr ""
+
+#: includes/class-ndk-shortcodes.php:140
+msgid "Day"
+msgstr ""
+
+#: includes/class-ndk-widgets.php:94
+msgid "Nepali Date: Today"
+msgstr ""
+
+#: includes/class-ndk-widgets.php:94
+msgid "Today's date in Bikram Sambat."
+msgstr ""
+
+#: includes/class-ndk-widgets.php:99
+#: includes/class-ndk-widgets.php:120
+msgid "Title:"
+msgstr ""
+
+#: includes/class-ndk-widgets.php:100
+msgid "BS format:"
+msgstr ""
+
+#: includes/class-ndk-widgets.php:101
+#: includes/class-ndk-widgets.php:121
+msgid "Language:"
+msgstr ""
+
+#: includes/class-ndk-widgets.php:102
+#: blocks/today/index.js:42
+msgid "Also show the AD date"
+msgstr ""
+
+#: includes/class-ndk-widgets.php:103
+msgid "AD format:"
+msgstr ""
+
+#: includes/class-ndk-widgets.php:115
+msgid "Nepali Date: Converter"
+msgstr ""
+
+#: includes/class-ndk-widgets.php:115
+msgid "Convert dates between BS and AD."
+msgstr ""
+
+#: includes/class-ndk-widgets.php:120
+msgid "Date converter"
+msgstr ""
+
+#: includes/functions.php:218
+msgid "Invalid date. Use the format YYYY-MM-DD."
+msgstr ""
+
+#. translators: 1: calendar (BS/AD), 2: first supported date, 3: last supported date.
+#: includes/functions.php:222
+#, php-format
+msgid "Invalid or unsupported %1$s date. Supported range: %2$s to %3$s."
+msgstr ""
+
+#: blocks/today/index.js:22
+msgid "BS format"
+msgstr ""
+
+#: blocks/today/index.js:23
+msgid "PHP date characters, e.g. \"l, j F Y\" or \"Y-m-d\"."
+msgstr ""
+
+#: blocks/today/index.js:33
+msgid "Site default"
+msgstr ""
+
+#: blocks/today/index.js:50
+msgid "AD format"
+msgstr ""
+
+#: blocks/today/block.json
+msgctxt "block title"
+msgid "Nepali Date: Today"
+msgstr ""
+
+#: blocks/today/block.json
+msgctxt "block description"
+msgid "Today's date in Bikram Sambat (BS)."
+msgstr ""
+
+#: blocks/today/block.json
+msgctxt "block keyword"
+msgid "nepali"
+msgstr ""
+
+#: blocks/today/block.json
+msgctxt "block keyword"
+msgid "bs"
+msgstr ""
+
+#: blocks/today/block.json
+msgctxt "block keyword"
+msgid "bikram sambat"
+msgstr ""
+
+#: blocks/today/block.json
+msgctxt "block keyword"
+msgid "date"
+msgstr ""
+
+#: blocks/today/block.json
+msgctxt "block keyword"
+msgid "patro"
+msgstr ""
