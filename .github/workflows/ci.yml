@@ -72,6 +72,13 @@ jobs:
         working-directory: site
         run: |
           if grep -i "nepali-date-kit" wp-content/debug.log 2>/dev/null; then exit 1; fi
+      - name: Plugin Check (WordPress.org review rules)
+        if: matrix.wp == 'latest'
+        working-directory: site
+        run: |
+          wp plugin install plugin-check --activate
+          wp plugin check nepali-date-kit --format=table | tee pc.txt
+          ! grep -E "ERROR|WARNING" pc.txt
       - name: Uninstall removes data
         working-directory: site
         run: |
@@ -80,13 +87,3 @@ jobs:
           wp plugin uninstall nepali-date-kit
           ! wp option get ndk_settings
 
-  plugin-check:
-    name: Plugin Check (WordPress.org review rules)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build release ZIP
-        run: sh bin/build-zip.sh && cd dist && unzip -q *.zip
-      - uses: wordpress/plugin-check-action@v1
-        with:
-          build-dir: dist/nepali-date-kit

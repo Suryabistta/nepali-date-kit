@@ -1,5 +1,9 @@
 # Nepali Date Kit
 
+[![CI](https://github.com/Suryabistta/nepali-date-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/Suryabistta/nepali-date-kit/actions/workflows/ci.yml) [![License: GPL v2+](https://img.shields.io/badge/license-GPLv2%2B-blue.svg)](LICENSE) ![WordPress 6.0+](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg) ![PHP 7.4+](https://img.shields.io/badge/PHP-7.4%2B-777bb4.svg)
+
+![Nepali Date Kit](.wordpress-org/banner-1544x500.png)
+
 A WordPress plugin for Bikram Sambat (BS) dates:
 
 - **Post dates in BS.** Works with classic themes (`get_the_date()`, `the_time()` …) and block themes (the core *Post Date* block). Published and modified dates each use their own value.
@@ -11,7 +15,11 @@ Machine-readable dates (`<time datetime>`, `DATE_W3C`, `c`, `U`, feeds) are alwa
 
 ## Install
 
-Copy this folder to `wp-content/plugins/nepali-date-kit` and activate it. Settings are under **Settings → Nepali Date**.
+1. Download `nepali-date-kit-x.y.z.zip` from the [latest release](https://github.com/Suryabistta/nepali-date-kit/releases/latest).
+2. In WordPress go to **Plugins → Add New → Upload Plugin**, choose the ZIP, then **Install** and **Activate**.
+3. Post dates now show in Nepali. Adjust it under **Settings → Nepali Date**.
+
+![Converter](.wordpress-org/screenshot-1.png)
 
 ## Shortcodes
 
@@ -58,7 +66,13 @@ To correct a year, edit its row in `includes/class-ndk-calendar.php`, add the mo
 php tests/run.php   # engine + formatter tests, no WordPress needed
 ```
 
-CI runs the tests and a lint on PHP 7.4–8.4.
+CI runs the unit tests on PHP 7.4–8.4, installs the release ZIP on real WordPress 6.0, 6.4 and latest (MySQL) for smoke and uninstall tests, and runs the official Plugin Check.
+
+`sh bin/build-zip.sh` builds the release ZIP. Pushing a tag `vX.Y.Z` that matches the version header publishes a GitHub release.
+
+## Contributing
+
+Issues and pull requests are welcome, especially calendar corrections with a source (e.g. a Hamro Patro link).
 
 ## License
 

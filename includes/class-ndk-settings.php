@@ -100,8 +100,16 @@ final class NDK_Settings {
 	}
 
 	public static function field_lang() {
-		$v = ndk_get_setting( 'lang' );
-		self::radio( 'lang', array( 'ne' => 'नेपाली (२०८३ कात्तिक ५)', 'en' => 'English (5 Kartik 2083)' ), $v );
+		$v   = ndk_get_setting( 'lang' );
+		$now = ndk_now();
+		self::radio(
+			'lang',
+			array(
+				'ne' => 'नेपाली (' . ndk_format_datetime( $now, 'j F Y', 'ne' ) . ')',
+				'en' => 'English (' . ndk_format_datetime( $now, 'j F Y', 'en' ) . ')',
+			),
+			$v
+		);
 	}
 
 	public static function field_timezone() {
