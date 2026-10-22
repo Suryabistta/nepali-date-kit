@@ -24,7 +24,8 @@ final class NDK_Post_Dates {
 	);
 
 	public static function init() {
-		add_action( 'wp', array( __CLASS__, 'register' ) );
+		// Priority 0: themes such as JNews answer their own AJAX requests on 'wp' and exit.
+		add_action( 'wp', array( __CLASS__, 'register' ), 0 );
 	}
 
 	/**
