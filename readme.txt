@@ -1,10 +1,10 @@
 === Nepali Date Kit – Nepali Date Converter & Bikram Sambat (BS) Dates ===
-Contributors: suryabistta
+Contributors: suryabista
 Tags: nepali date, bikram sambat, nepali post date, nepali calendar, date converter
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,6 +115,9 @@ It can run alongside it, but both change post dates, so keep only one active for
 
 == Changelog ==
 
+= 1.1.1 =
+* Readme: correct WordPress.org contributor username.
+
 = 1.1.0 =
 * New: "Month names" setting (everyday or formal spelling) and the `ndk_month_names` filter.
 * New: optional BS dates for comments.
@@ -133,6 +136,9 @@ It can run alongside it, but both change post dates, so keep only one active for
 * First release: Nepali post dates (block and classic themes), the Today block, widgets and shortcodes, the BS ⇄ AD converter, a REST API and a settings page.
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+Readme update only.
 
 = 1.1.0 =
 Month spelling choice, comment dates, cache-safe "today" dates, and BS dates in AJAX-loaded posts.
