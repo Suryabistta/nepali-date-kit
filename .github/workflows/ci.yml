@@ -7,6 +7,7 @@ on:
 
 jobs:
   test:
+    name: Unit (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -19,6 +20,73 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
       - name: Lint
-        run: find . -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
+        run: find . -name '*.php' -print0 | xargs -0 -n1 php -l
       - name: Tests
         run: php tests/run.php
+
+  wordpress:
+    name: WordPress ${{ matrix.wp }} (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { wp: '6.0', php: '7.4' }
+          - { wp: '6.4', php: '8.1' }
+          - { wp: 'latest', php: '8.4' }
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wp
+        ports: ['3306:3306']
+        options: --health-cmd="mysqladmin ping -proot" --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli
+          tools: wp-cli
+          coverage: none
+      - name: Build release ZIP
+        run: sh bin/build-zip.sh
+      - name: Install WordPress
+        run: |
+          mkdir site && cd site
+          wp core download --version=${{ matrix.wp }}
+          wp config create --dbname=wp --dbuser=root --dbpass=root --dbhost=127.0.0.1 --extra-php <<'PHP'
+          define( 'WP_DEBUG', true );
+          define( 'WP_DEBUG_LOG', true );
+          define( 'WP_DEBUG_DISPLAY', false );
+          PHP
+          wp core install --url=http://localhost --title=CI --admin_user=admin --admin_password=admin --admin_email=ci@example.com --skip-email
+      - name: Install plugin from ZIP and activate
+        working-directory: site
+        run: wp plugin install ../dist/*.zip --activate
+      - name: Smoke test
+        working-directory: site
+        run: wp eval-file ../tests/smoke.php
+      - name: No PHP notices from the plugin
+        working-directory: site
+        run: |
+          if grep -i "nepali-date-kit" wp-content/debug.log 2>/dev/null; then exit 1; fi
+      - name: Uninstall removes data
+        working-directory: site
+        run: |
+          wp option update ndk_settings '{"lang":"en"}' --format=json
+          wp plugin deactivate nepali-date-kit
+          wp plugin uninstall nepali-date-kit
+          ! wp option get ndk_settings
+
+  plugin-check:
+    name: Plugin Check (WordPress.org review rules)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build release ZIP
+        run: sh bin/build-zip.sh && cd dist && unzip -q *.zip
+      - uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: dist/nepali-date-kit
