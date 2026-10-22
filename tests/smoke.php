@@ -53,6 +53,11 @@ NDK_Post_Dates::register();
 $ndk_check( 'get_the_date() in BS', 'कात्तिक ५, २०८३' === get_the_date( 'F j, Y', $ndk_post ), get_the_date( 'F j, Y', $ndk_post ) );
 $ndk_check( 'get_the_date("c") stays AD', 0 === strpos( get_the_date( 'c', $ndk_post ), '2026-10-22T08:30:00' ) );
 $ndk_check( 'get_the_date("U") stays a timestamp', is_numeric( get_the_date( 'U', $ndk_post ) ) );
+$ndk_check( 'get_the_date("Y-m-d H:i:s") stays AD (schema, comparisons)', '2026-10-22 08:30:00' === get_the_date( 'Y-m-d H:i:s', $ndk_post ), get_the_date( 'Y-m-d H:i:s', $ndk_post ) );
+update_option( 'ndk_settings', array( 'date_format' => 'j F Y,' ) );
+$ndk_check( 'override applies to the default format', '५ कात्तिक २०८३,' === get_the_date( '', $ndk_post ), get_the_date( '', $ndk_post ) );
+$ndk_check( 'override leaves explicit formats alone', 'बिहिबार' === get_the_date( 'l', $ndk_post ), get_the_date( 'l', $ndk_post ) );
+delete_option( 'ndk_settings' );
 
 $ndk_block = new WP_Block(
 	array(

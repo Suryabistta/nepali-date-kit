@@ -105,6 +105,30 @@ final class NDK_Formatter {
 	}
 
 	/**
+	 * Whether a format only uses zero-padded numeric tokens, e.g. 'Y-m-d' or
+	 * 'Y-m-d H:i:s'. Themes and plugins request these for structured data,
+	 * sorting and date comparisons, so post-date filters leave them in AD.
+	 */
+	public static function is_numeric_format( $format ) {
+		$len     = strlen( $format );
+		$letters = 0;
+		for ( $i = 0; $i < $len; $i++ ) {
+			$c = $format[ $i ];
+			if ( '\\' === $c ) {
+				++$i;
+				continue;
+			}
+			if ( ctype_alpha( $c ) ) {
+				if ( false === strpos( 'YymdHisvu', $c ) ) {
+					return false;
+				}
+				++$letters;
+			}
+		}
+		return $letters > 0;
+	}
+
+	/**
 	 * Convert ASCII digits to Devanagari.
 	 */
 	public static function nepali_digits( $str ) {

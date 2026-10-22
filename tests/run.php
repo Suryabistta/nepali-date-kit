@@ -156,6 +156,13 @@ foreach ( array( 'F j, Y', 'Y-m-d', 'g:i a', 'l, j F Y', 'j \o\f F', 'H:i', '\T\
 	check( "display format $fmt", NDK_Formatter::is_machine_format( $fmt ), false );
 }
 
+foreach ( array( 'Y-m-d', 'Y-m-d H:i:s', 'Ymd', 'Y/m/d', 'H:i' ) as $fmt ) {
+	check( "numeric format $fmt", NDK_Formatter::is_numeric_format( $fmt ), true );
+}
+foreach ( array( 'j F Y', 'F j, Y', 'l', 'Y-n-j', 'g:i a', 'j \\o\\f F', '' ) as $fmt ) {
+	check( "not numeric format $fmt", NDK_Formatter::is_numeric_format( $fmt ), false );
+}
+
 // Speed: conversions should be cheap enough for long post lists.
 $t0 = microtime( true );
 for ( $i = 0; $i < 10000; $i++ ) {

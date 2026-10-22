@@ -130,16 +130,18 @@ final class NDK_Post_Dates {
 	 * @return string|null Null when the format is machine-readable or the date is out of range.
 	 */
 	public static function format_moment( DateTimeInterface $datetime, $format, $kind ) {
-		if ( '' !== $format && NDK_Formatter::is_machine_format( $format ) ) {
+		if ( '' !== $format && ( NDK_Formatter::is_machine_format( $format ) || NDK_Formatter::is_numeric_format( $format ) ) ) {
 			return null;
 		}
 
 		if ( 'date' === $kind ) {
-			$override = (string) ndk_get_setting( 'date_format' );
-			if ( '' !== $override ) {
-				$format = $override;
-			} elseif ( '' === $format ) {
-				$format = get_option( 'date_format' );
+			// The override replaces the site's default format only, so explicit
+			// formats a theme asks for (e.g. 'l' for a weekday label) are kept.
+			$site_format = (string) get_option( 'date_format' );
+			$is_default  = '' === $format || $format === $site_format;
+			$override    = (string) ndk_get_setting( 'date_format' );
+			if ( $is_default ) {
+				$format = '' !== $override ? $override : $site_format;
 			}
 
 			if ( ndk_get_setting( 'relative' ) ) {

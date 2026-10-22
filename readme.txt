@@ -4,7 +4,7 @@ Tags: nepali date, bikram sambat, nepali post date, nepali calendar, date conver
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,10 @@ It can run alongside it, but both change post dates, so keep only one active for
 
 == Changelog ==
 
+= 1.0.2 =
+* Numeric date formats such as Y-m-d H:i:s (used by schema markup and date comparisons) now stay in AD.
+* The Date format setting now replaces only the site's default date format, so explicit formats requested by a theme are kept.
+
 = 1.0.1 =
 * Register post-date filters early, so themes that answer AJAX requests on the 'wp' hook (e.g. JNews "load more") also show BS dates.
 * Uninstall cleans up every site on multisite.
@@ -103,6 +107,9 @@ It can run alongside it, but both change post dates, so keep only one active for
 * First release: Nepali post dates (block and classic themes), the Today block, widgets and shortcodes, the BS ⇄ AD converter, a REST API and a settings page.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Fixes BS dates leaking into schema markup (JSON-LD datePublished).
 
 = 1.0.1 =
 BS dates in theme AJAX blocks; multisite uninstall cleanup.

@@ -166,7 +166,7 @@ final class NDK_Settings {
 			esc_attr( self::OPTION ),
 			esc_attr( $v )
 		);
-		echo '<p class="description">' . esc_html__( 'Leave empty to keep the format your theme asks for. Uses PHP date characters, e.g. "l, j F Y" or "Y-m-d".', 'nepali-date-kit' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Used wherever your theme shows the site\'s default date format. Leave empty to keep that format. Uses PHP date characters, e.g. "l, j F Y" or "j F Y".', 'nepali-date-kit' ) . '</p>';
 		$example = ndk_format_datetime( ndk_now(), '' !== $v ? $v : get_option( 'date_format' ) );
 		/* translators: %s: example date. */
 		echo '<p class="description">' . esc_html( sprintf( __( 'Today: %s', 'nepali-date-kit' ), $example ) ) . '</p>';
