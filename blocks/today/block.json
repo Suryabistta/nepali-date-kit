@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "nepali-date-kit/today",
+	"title": "Nepali Date: Today",
+	"category": "widgets",
+	"icon": "calendar-alt",
+	"description": "Today's date in Bikram Sambat (BS).",
+	"keywords": [ "nepali", "bs", "bikram sambat", "date", "patro" ],
+	"textdomain": "nepali-date-kit",
+	"attributes": {
+		"format": { "type": "string", "default": "l, j F Y" },
+		"lang": { "type": "string", "enum": [ "", "ne", "en" ], "default": "" },
+		"showAd": { "type": "boolean", "default": false },
+		"adFormat": { "type": "string", "default": "l, F j, Y" }
+	},
+	"supports": {
+		"html": false,
+		"align": true,
+		"color": { "text": true, "background": true },
+		"typography": { "fontSize": true },
+		"spacing": { "padding": true, "margin": true }
+	},
+	"editorScript": "file:./index.js"
+}

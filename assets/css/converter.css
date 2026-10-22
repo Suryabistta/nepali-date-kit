@@ -1,0 +1,35 @@
+.ndk-converter {
+	display: grid;
+	gap: 1rem;
+}
+
+.ndk-converter__panel fieldset {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	align-items: center;
+	margin: 0;
+	padding: 0.75rem 1rem;
+	border: 1px solid currentColor;
+	border-radius: 6px;
+}
+
+.ndk-converter__panel legend {
+	padding: 0 0.25rem;
+	font-weight: 600;
+}
+
+.ndk-converter__panel select {
+	min-width: 4.5rem;
+}
+
+.ndk-converter__result {
+	display: block;
+	min-height: 1.5em;
+	margin-top: 0.5rem;
+	font-weight: 600;
+}
+
+.ndk-converter__result.is-error {
+	color: #b32d2e;
+}
