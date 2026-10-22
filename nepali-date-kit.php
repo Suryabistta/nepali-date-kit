@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       Nepali Date Kit – Bikram Sambat Dates & Converter
+ * Plugin Name:       Nepali Date Kit – Nepali Date Converter & Bikram Sambat (BS) Dates
  * Description:       Show post dates in Nepali (Bikram Sambat / BS), today's Nepali date, and a BS ⇄ AD date converter. Works with block and classic themes.
- * Version:           1.0.2
+ * Version:           1.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Surya Bista
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NDK_VERSION', '1.0.2' );
+define( 'NDK_VERSION', '1.1.0' );
 define( 'NDK_FILE', __FILE__ );
 define( 'NDK_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NDK_URL', plugin_dir_url( __FILE__ ) );

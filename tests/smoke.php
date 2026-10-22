@@ -80,6 +80,53 @@ $ndk_sanitized = NDK_Settings::sanitize( array( 'date_format' => 'c', 'post_type
 $ndk_check( 'settings reject machine formats and unknown post types', '' === $ndk_sanitized['date_format'] && array( 'post' ) === $ndk_sanitized['post_types'] );
 $ndk_check( 'settings survive garbage input', is_array( NDK_Settings::sanitize( 'garbage' ) ) );
 
+// Month names setting and filter.
+$ndk_reset = function () {
+	$p = new ReflectionProperty( 'NDK_Post_Dates', 'registered' );
+	$p->setAccessible( true );
+	$p->setValue( null, false );
+	foreach ( array( 'get_the_date', 'get_the_time', 'get_the_modified_date', 'get_the_modified_time', 'get_comment_date', 'get_comment_time', 'render_block_core/post-date' ) as $h ) {
+		remove_all_filters( $h );
+	}
+};
+update_option( 'ndk_settings', array( 'month_names' => 'formal' ) );
+ndk_apply_names();
+$ndk_check( 'formal month names setting', false !== strpos( get_the_date( 'j F Y', $ndk_post ), 'कार्तिक' ), get_the_date( 'j F Y', $ndk_post ) );
+add_filter( 'ndk_month_names', function ( $m ) { $m['ne'][6] = 'TESTMONTH'; return $m; } );
+ndk_apply_names();
+$ndk_check( 'ndk_month_names filter', false !== strpos( get_the_date( 'j F Y', $ndk_post ), 'TESTMONTH' ) );
+remove_all_filters( 'ndk_month_names' );
+delete_option( 'ndk_settings' );
+NDK_Formatter::reset_names();
+
+// Comment dates (off by default, on with the setting).
+$ndk_comment = wp_insert_comment( array( 'comment_post_ID' => $ndk_post, 'comment_content' => 'smoke', 'comment_approved' => 1, 'comment_date' => '2026-10-22 08:45:00', 'comment_date_gmt' => '2026-10-22 03:00:00' ) );
+$ndk_check( 'comment date stays AD by default', false === strpos( get_comment_date( 'j F Y', $ndk_comment ), '२०८३' ), get_comment_date( 'j F Y', $ndk_comment ) );
+update_option( 'ndk_settings', array( 'convert_comments' => true ) );
+$ndk_reset();
+NDK_Post_Dates::register();
+$ndk_check( 'comment date in BS when enabled', '५ कात्तिक २०८३' === get_comment_date( 'j F Y', $ndk_comment ), get_comment_date( 'j F Y', $ndk_comment ) );
+$ndk_check( 'comment date "c" stays AD', 0 === strpos( get_comment_date( 'c', $ndk_comment ), '2026-10-22' ) );
+wp_delete_comment( $ndk_comment, true );
+delete_option( 'ndk_settings' );
+
+// Front-end AJAX (theme "load more" through admin-ajax.php).
+add_filter( 'wp_doing_ajax', '__return_true' );
+$ndk_reset();
+$_SERVER['HTTP_REFERER'] = admin_url( 'edit.php' );
+NDK_Post_Dates::register_for_frontend_ajax();
+$ndk_check( 'admin-screen AJAX is left alone', ! has_filter( 'get_the_date' ) );
+$_SERVER['HTTP_REFERER'] = home_url( '/' );
+NDK_Post_Dates::register_for_frontend_ajax();
+$ndk_check( 'front-end AJAX converts dates', 'कात्तिक ५, २०८३' === get_the_date( 'F j, Y', $ndk_post ), get_the_date( 'F j, Y', $ndk_post ) );
+remove_filter( 'wp_doing_ajax', '__return_true' );
+unset( $_SERVER['HTTP_REFERER'] );
+
+// [ndk_today] carries its date for the cached-page refresh script.
+$ndk_html = do_shortcode( '[ndk_today]' );
+$ndk_check( '[ndk_today] has data-ndk-ymd', (bool) preg_match( '/data-ndk-ymd="\d{4}-\d{2}-\d{2}"/', $ndk_html ) );
+$ndk_check( 'refresh script enqueued', wp_script_is( 'ndk-today', 'enqueued' ) );
+
 wp_delete_post( $ndk_post, true );
 
 if ( $ndk_failures ) {

@@ -1,10 +1,10 @@
-=== Nepali Date Kit – Bikram Sambat Dates & Converter ===
+=== Nepali Date Kit – Nepali Date Converter & Bikram Sambat (BS) Dates ===
 Contributors: suryabistta
 Tags: nepali date, bikram sambat, nepali post date, nepali calendar, date converter
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,6 +13,10 @@ Show post dates in Nepali (Bikram Sambat / BS), today's Nepali date, and a BS �
 == Description ==
 
 **Nepali Date Kit** shows dates in the Nepali calendar (Bikram Sambat, BS / वि.सं.) across your WordPress site, in Nepali (बिहिबार, ५ कात्तिक २०८३) or English (Bihibar, 5 Kartik 2083).
+
+= नेपालीमा =
+
+**Nepali Date Kit** ले तपाईंको WordPress साइटमा नेपाली मिति (विक्रम संवत्) देखाउँछ: समाचार र पोस्टको मिति नेपालीमा, आजको नेपाली मिति (जस्तै: बिहिबार, ५ कात्तिक २०८३), र वि.सं. ⇄ ई.सं. मिति परिवर्तक। नयाँ र पुराना दुवै WordPress थिममा काम गर्छ, र Google का लागि मिति अंग्रेजी (AD) ढाँचामै सुरक्षित राख्छ।
 
 = Features =
 
@@ -23,6 +27,10 @@ Show post dates in Nepali (Bikram Sambat / BS), today's Nepali date, and a BS �
 * **Nepal time or site time.** Today's date follows Nepal time (Asia/Kathmandu) by default, so it changes at midnight in Nepal. You can switch to your site's timezone.
 * **Fast and safe.** Each conversion takes microseconds. Invalid or out-of-range dates never break a page.
 * **Cache-friendly.** The converter uses a public REST endpoint with no nonce, so it keeps working behind page caches and CDNs.
+* **Works with caching.** If a cached page still shows yesterday's date after midnight, a tiny script corrects it in the browser.
+* **Your spelling.** Everyday month names (बैशाख … कात्तिक … चैत) or formal ones (वैशाख … कार्तिक … चैत्र), or your own via the `ndk_month_names` filter.
+* **Comment dates** in BS too (optional).
+* **Load more / infinite scroll.** Dates loaded later through AJAX are converted as well.
 * **Developer API.** PHP functions and a REST endpoint (see below).
 
 = Shortcodes =
@@ -82,6 +90,18 @@ The default is Nepal time. If your site is for another country, choose "Site tim
 
 Turn on **Relative dates** in the settings, or set the Post Date block's format to "Relative".
 
+= Can I write कार्तिक instead of कात्तिक? =
+
+Yes. Under **Settings → Nepali Date → Month names**, choose the formal names (वैशाख, ज्येष्ठ, … कार्तिक, … चैत्र). For any other spelling, use the `ndk_month_names` filter.
+
+= I use a page cache. Will today's date go stale? =
+
+No. The date shown by `[ndk_today]`, the Today block and widget is checked in the visitor's browser. If the cached page is from yesterday, it updates itself.
+
+= Can comment dates be shown in BS? =
+
+Yes. Tick **Comment dates and times** under **Settings → Nepali Date → Convert**.
+
 = Can I use it with the "Nepali Date Converter" plugin? =
 
 It can run alongside it, but both change post dates, so keep only one active for post dates.
@@ -95,6 +115,12 @@ It can run alongside it, but both change post dates, so keep only one active for
 
 == Changelog ==
 
+= 1.1.0 =
+* New: "Month names" setting (everyday or formal spelling) and the `ndk_month_names` filter.
+* New: optional BS dates for comments.
+* New: dates on cached pages refresh themselves after midnight.
+* Fix: dates loaded by "load more" or infinite scroll through admin-ajax.php are now converted.
+
 = 1.0.2 =
 * Numeric date formats such as Y-m-d H:i:s (used by schema markup and date comparisons) now stay in AD.
 * The Date format setting now replaces only the site's default date format, so explicit formats requested by a theme are kept.
@@ -107,6 +133,9 @@ It can run alongside it, but both change post dates, so keep only one active for
 * First release: Nepali post dates (block and classic themes), the Today block, widgets and shortcodes, the BS ⇄ AD converter, a REST API and a settings page.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Month spelling choice, comment dates, cache-safe "today" dates, and BS dates in AJAX-loaded posts.
 
 = 1.0.2 =
 Fixes BS dates leaking into schema markup (JSON-LD datePublished).

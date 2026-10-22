@@ -149,6 +149,15 @@ check( 'no time -> midnight', $f( 'H:i', 'en' ), '00:00' );
 check( 'unknown chars pass through', $f( 'Y-W', 'en' ), '2083-W' );
 check( 'tuesday spelling', NDK_Formatter::format( NDK_Calendar::ad_to_bs( 2026, 10, 20 ), 'l' ), 'मङ्गलबार' );
 
+// Name overrides (month spelling setting / ndk_month_names filter).
+NDK_Formatter::set_names( 'months', array( 'ne' => NDK_Formatter::MONTHS_FORMAL['ne'] ) );
+check( 'formal month name', $f( 'F' ), 'कार्तिक' );
+check( 'english names untouched by ne override', $f( 'F', 'en' ), 'Kartik' );
+NDK_Formatter::set_names( 'months', array( 'ne' => array( 'too', 'short' ) ) );
+check( 'wrong-length list ignored', $f( 'F' ), 'कार्तिक' );
+NDK_Formatter::reset_names();
+check( 'reset to everyday names', $f( 'F' ), 'कात्तिक' );
+
 foreach ( array( 'c', 'r', 'U', 'G', DATE_W3C, DATE_ATOM, DATE_RFC2822, DATE_RSS, 'Y-m-d\TH:i:sP', 'T' ) as $fmt ) {
 	check( "machine format $fmt", NDK_Formatter::is_machine_format( $fmt ), true );
 }

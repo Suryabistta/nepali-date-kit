@@ -52,6 +52,7 @@ final class NDK_Settings {
 
 		self::field( 'lang', __( 'Language', 'nepali-date-kit' ), 'ndk_display' );
 		self::field( 'timezone', __( 'Timezone', 'nepali-date-kit' ), 'ndk_display' );
+		self::field( 'month_names', __( 'Month names', 'nepali-date-kit' ), 'ndk_display' );
 		self::field( 'convert', __( 'Convert', 'nepali-date-kit' ), 'ndk_posts' );
 		self::field( 'post_types', __( 'Post types', 'nepali-date-kit' ), 'ndk_posts' );
 		self::field( 'date_format', __( 'Date format', 'nepali-date-kit' ), 'ndk_posts' );
@@ -73,8 +74,9 @@ final class NDK_Settings {
 
 		$out['lang']     = isset( $input['lang'] ) && 'en' === $input['lang'] ? 'en' : 'ne';
 		$out['timezone'] = isset( $input['timezone'] ) && 'site' === $input['timezone'] ? 'site' : 'nepal';
+		$out['month_names'] = isset( $input['month_names'] ) && 'formal' === $input['month_names'] ? 'formal' : 'colloquial';
 
-		foreach ( array( 'convert_date', 'convert_time', 'convert_modified_date', 'convert_modified_time', 'relative' ) as $key ) {
+		foreach ( array( 'convert_date', 'convert_time', 'convert_modified_date', 'convert_modified_time', 'convert_comments', 'relative' ) as $key ) {
 			$out[ $key ] = ! empty( $input[ $key ] );
 		}
 
@@ -125,12 +127,24 @@ final class NDK_Settings {
 		);
 	}
 
+	public static function field_month_names() {
+		self::radio(
+			'month_names',
+			array(
+				'colloquial' => __( 'Everyday names: बैशाख, जेठ, … कात्तिक, … चैत', 'nepali-date-kit' ),
+				'formal'     => __( 'Formal names: वैशाख, ज्येष्ठ, … कार्तिक, … चैत्र', 'nepali-date-kit' ),
+			),
+			ndk_get_setting( 'month_names' )
+		);
+	}
+
 	public static function field_convert() {
 		$labels = array(
 			'convert_date'          => __( 'Published date', 'nepali-date-kit' ),
 			'convert_time'          => __( 'Published time', 'nepali-date-kit' ),
 			'convert_modified_date' => __( 'Modified date', 'nepali-date-kit' ),
 			'convert_modified_time' => __( 'Modified time', 'nepali-date-kit' ),
+			'convert_comments'      => __( 'Comment dates and times', 'nepali-date-kit' ),
 		);
 		foreach ( $labels as $key => $label ) {
 			printf(

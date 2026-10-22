@@ -35,6 +35,15 @@ final class NDK_Assets {
 		);
 	}
 
+	/** Refreshes [ndk_today] dates on cached pages after midnight. */
+	public static function enqueue_today() {
+		if ( ! wp_script_is( 'ndk-today', 'registered' ) ) {
+			wp_register_script( 'ndk-today', NDK_URL . 'assets/js/today.js', array(), NDK_VERSION, true );
+			wp_add_inline_script( 'ndk-today', 'window.ndkToday = ' . wp_json_encode( array( 'endpoint' => esc_url_raw( rest_url( NDK_REST::NAMESPACE_V1 . '/convert' ) ) ) ) . ';', 'before' );
+		}
+		wp_enqueue_script( 'ndk-today' );
+	}
+
 	public static function enqueue_converter() {
 		self::register();
 		wp_enqueue_style( 'ndk-converter' );

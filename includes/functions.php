@@ -24,8 +24,27 @@ function ndk_default_settings() {
 		'post_types'            => array( 'post', 'page' ),
 		'relative'              => false,
 		'relative_days'         => 7,
+		'convert_comments'      => false,
+		'month_names'           => 'colloquial', // 'colloquial' (बैशाख … कात्तिक … चैत) or 'formal' (वैशाख … कार्तिक … चैत्र).
 	);
 }
+
+/**
+ * Hand the month names chosen in the settings (and the ndk_month_names filter) to the formatter.
+ */
+function ndk_apply_names() {
+	$months = 'formal' === ndk_get_setting( 'month_names' ) ? NDK_Formatter::MONTHS_FORMAL : NDK_Formatter::MONTHS;
+	/**
+	 * Filters BS month names.
+	 *
+	 * @param array $months array( 'ne' => 12 names, 'en' => 12 names ).
+	 */
+	NDK_Formatter::set_names( 'months', (array) apply_filters( 'ndk_month_names', $months ) );
+	if ( 'formal' === ndk_get_setting( 'month_names' ) ) {
+		NDK_Formatter::set_names( 'months_short', array( 'ne' => NDK_Formatter::MONTHS_FORMAL['ne'] ) );
+	}
+}
+add_action( 'init', 'ndk_apply_names', 5 );
 
 /**
  * Get one setting, or all of them.

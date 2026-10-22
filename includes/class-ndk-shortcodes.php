@@ -45,7 +45,16 @@ final class NDK_Shortcodes {
 			$ad    = wp_date( self::display_format( $atts['ad_format'], 'l, F j, Y' ), $now->getTimestamp(), $now->getTimezone() );
 			$html .= ' <span class="ndk-today__ad">' . esc_html( $ad ) . '</span>';
 		}
-		return '<span class="ndk-today">' . $html . '</span>';
+		NDK_Assets::enqueue_today();
+		return sprintf(
+			'<span class="ndk-today" data-ndk-ymd="%1$s" data-ndk-offset="%2$d" data-ndk-lang="%3$s" data-ndk-format="%4$s" data-ndk-adformat="%5$s">%6$s</span>',
+			esc_attr( $now->format( 'Y-m-d' ) ),
+			(int) ( $now->getOffset() / 60 ),
+			esc_attr( self::lang( $atts['lang'] ) ),
+			esc_attr( self::display_format( $atts['format'], 'l, j F Y' ) ),
+			esc_attr( self::display_format( $atts['ad_format'], 'l, F j, Y' ) ),
+			$html
+		);
 	}
 
 	/**

@@ -28,6 +28,12 @@ final class NDK_Formatter {
 		'en' => array( 'Bai', 'Jes', 'Asa', 'Shr', 'Bha', 'Ash', 'Kar', 'Man', 'Pou', 'Mag', 'Fal', 'Cha' ),
 	);
 
+	/* Formal month names (as in government documents), for sites that prefer them. */
+	const MONTHS_FORMAL = array(
+		'ne' => array( 'वैशाख', 'ज्येष्ठ', 'आषाढ', 'श्रावण', 'भाद्र', 'आश्विन', 'कार्तिक', 'मंसिर', 'पौष', 'माघ', 'फाल्गुन', 'चैत्र' ),
+		'en' => array( 'Baishakh', 'Jestha', 'Ashadh', 'Shrawan', 'Bhadra', 'Ashwin', 'Kartik', 'Mangsir', 'Poush', 'Magh', 'Falgun', 'Chaitra' ),
+	);
+
 	/* Sunday first, matching NDK_Calendar weekday numbers. */
 	const DAYS = array(
 		'ne' => array( 'आइतबार', 'सोमबार', 'मङ्गलबार', 'बुधबार', 'बिहिबार', 'शुक्रबार', 'शनिबार' ),
@@ -50,6 +56,40 @@ final class NDK_Formatter {
 	 * format and should be left to PHP/WordPress.
 	 */
 	const MACHINE_TOKENS = 'crUueIOPpTZvB';
+
+	/** @var array<string, array> Name lists set by the WordPress layer, keyed 'months' etc. */
+	private static $names = array();
+
+	/**
+	 * Replace a name list, e.g. set_names( 'months', array( 'ne' => [...12], 'en' => [...12] ) ).
+	 * Lists with the wrong length are ignored.
+	 */
+	public static function set_names( $key, array $by_lang ) {
+		$size = 'months' === $key || 'months_short' === $key ? 12 : 7;
+		foreach ( $by_lang as $lang => $list ) {
+			if ( is_array( $list ) && count( $list ) === $size ) {
+				self::$names[ $key ][ $lang ] = array_values( array_map( 'strval', $list ) );
+			}
+		}
+	}
+
+	/** Forget overrides (tests). */
+	public static function reset_names() {
+		self::$names = array();
+	}
+
+	private static function name( $key, $lang, $index ) {
+		if ( isset( self::$names[ $key ][ $lang ][ $index ] ) ) {
+			return self::$names[ $key ][ $lang ][ $index ];
+		}
+		$defaults = array(
+			'months'       => self::MONTHS,
+			'months_short' => self::MONTHS_SHORT,
+			'days'         => self::DAYS,
+			'days_short'   => self::DAYS_SHORT,
+		);
+		return $defaults[ $key ][ $lang ][ $index ];
+	}
 
 	/**
 	 * Format a BS date.
@@ -151,9 +191,9 @@ final class NDK_Formatter {
 			case 'S':
 				return '';
 			case 'l':
-				return self::DAYS[ $lang ][ $bs['weekday'] ];
+				return self::name( 'days', $lang, $bs['weekday'] );
 			case 'D':
-				return self::DAYS_SHORT[ $lang ][ $bs['weekday'] ];
+				return self::name( 'days_short', $lang, $bs['weekday'] );
 			case 'N':
 				return $num( 0 === $bs['weekday'] ? 7 : $bs['weekday'] );
 			case 'w':
@@ -167,9 +207,9 @@ final class NDK_Formatter {
 			case 'n':
 				return $num( $bs['month'] );
 			case 'F':
-				return self::MONTHS[ $lang ][ $bs['month'] - 1 ];
+				return self::name( 'months', $lang, $bs['month'] - 1 );
 			case 'M':
-				return self::MONTHS_SHORT[ $lang ][ $bs['month'] - 1 ];
+				return self::name( 'months_short', $lang, $bs['month'] - 1 );
 			case 'Y':
 				return $num( $bs['year'] );
 			case 'y':

@@ -23,9 +23,14 @@ final class NDK_Post_Dates {
 		'get_the_modified_time' => array( 'modified', 'time', 'convert_modified_time' ),
 	);
 
+	/** @var bool */
+	private static $registered = false;
+
 	public static function init() {
 		// Priority 0: themes such as JNews answer their own AJAX requests on 'wp' and exit.
 		add_action( 'wp', array( __CLASS__, 'register' ), 0 );
+		// "Load more" and infinite scroll through admin-ajax.php never fire 'wp'.
+		add_action( 'admin_init', array( __CLASS__, 'register_for_frontend_ajax' ), 0 );
 	}
 
 	/**
@@ -34,6 +39,33 @@ final class NDK_Post_Dates {
 	public static function register() {
 		if ( is_admin() || is_feed() ) {
 			return;
+		}
+		self::add_filters();
+	}
+
+	/**
+	 * AJAX requests sent by front-end pages (not by wp-admin screens).
+	 */
+	public static function register_for_frontend_ajax() {
+		if ( ! wp_doing_ajax() ) {
+			return;
+		}
+		$referer = (string) wp_get_referer();
+		if ( '' === $referer || 0 === strpos( $referer, admin_url() ) ) {
+			return;
+		}
+		self::add_filters();
+	}
+
+	private static function add_filters() {
+		if ( self::$registered ) {
+			return;
+		}
+		self::$registered = true;
+
+		if ( ndk_get_setting( 'convert_comments' ) ) {
+			add_filter( 'get_comment_date', array( __CLASS__, 'convert_comment_date' ), 10, 3 );
+			add_filter( 'get_comment_time', array( __CLASS__, 'convert_comment_time' ), 10, 5 );
 		}
 		foreach ( self::FILTERS as $filter => $spec ) {
 			if ( ! ndk_get_setting( $spec[2] ) ) {
@@ -72,6 +104,48 @@ final class NDK_Post_Dates {
 		}
 		$converted = self::format_moment( $datetime, (string) $format, $kind );
 		return null === $converted ? $value : $converted;
+	}
+
+	/**
+	 * Comment dates.
+	 *
+	 * @param string          $value   Formatted date.
+	 * @param string          $format  Requested format.
+	 * @param WP_Comment|null $comment Comment.
+	 * @return string
+	 */
+	public static function convert_comment_date( $value, $format = '', $comment = null ) {
+		$datetime = self::comment_datetime( $comment );
+		$text     = $datetime ? self::format_moment( $datetime, (string) $format, 'date', false ) : null;
+		return null === $text ? $value : $text;
+	}
+
+	/**
+	 * Comment times.
+	 *
+	 * @param string          $value     Formatted time.
+	 * @param string          $format    Requested format.
+	 * @param bool            $gmt       Whether GMT was requested.
+	 * @param bool            $translate Whether to translate.
+	 * @param WP_Comment|null $comment   Comment.
+	 * @return string
+	 */
+	public static function convert_comment_time( $value, $format = '', $gmt = false, $translate = true, $comment = null ) {
+		$datetime = self::comment_datetime( $comment );
+		$text     = $datetime ? self::format_moment( $datetime, (string) $format, 'time', false ) : null;
+		return null === $text ? $value : $text;
+	}
+
+	private static function comment_datetime( $comment ) {
+		$comment = get_comment( $comment );
+		if ( ! $comment || ! $comment->comment_date_gmt || '0000-00-00 00:00:00' === $comment->comment_date_gmt ) {
+			return null;
+		}
+		try {
+			return new DateTimeImmutable( $comment->comment_date_gmt, new DateTimeZone( 'UTC' ) );
+		} catch ( Exception $e ) {
+			return null;
+		}
 	}
 
 	/**
@@ -127,9 +201,10 @@ final class NDK_Post_Dates {
 	 * @param DateTimeInterface $datetime Moment.
 	 * @param string            $format   Requested format ('' = site default).
 	 * @param string            $kind     'date' or 'time'.
+	 * @param bool              $relative Whether the "३ दिन अगाडि" setting may apply.
 	 * @return string|null Null when the format is machine-readable or the date is out of range.
 	 */
-	public static function format_moment( DateTimeInterface $datetime, $format, $kind ) {
+	public static function format_moment( DateTimeInterface $datetime, $format, $kind, $relative = true ) {
 		if ( '' !== $format && ( NDK_Formatter::is_machine_format( $format ) || NDK_Formatter::is_numeric_format( $format ) ) ) {
 			return null;
 		}
@@ -144,7 +219,7 @@ final class NDK_Post_Dates {
 				$format = '' !== $override ? $override : $site_format;
 			}
 
-			if ( ndk_get_setting( 'relative' ) ) {
+			if ( $relative && ndk_get_setting( 'relative' ) ) {
 				$age = time() - $datetime->getTimestamp();
 				if ( abs( $age ) < (int) ndk_get_setting( 'relative_days' ) * DAY_IN_SECONDS ) {
 					return ndk_human_time_diff( $datetime->getTimestamp() );

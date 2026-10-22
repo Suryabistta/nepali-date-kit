@@ -1,0 +1,24 @@
+{
+ "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+ "landingPage": "/bs-converter/",
+ "preferredVersions": {
+  "php": "8.2",
+  "wp": "latest"
+ },
+ "steps": [
+  {
+   "step": "installPlugin",
+   "pluginData": {
+    "resource": "wordpress.org/plugins",
+    "slug": "nepali-date-kit"
+   },
+   "options": {
+    "activate": true
+   }
+  },
+  {
+   "step": "runPHP",
+   "code": "<?php require '/wordpress/wp-load.php'; wp_insert_post( array( 'post_type' => 'page', 'post_status' => 'publish', 'post_name' => 'bs-converter', 'post_title' => 'आजको मिति र मिति परिवर्तक', 'post_content' => '<!-- wp:nepali-date-kit/today {\"showAd\":true} /--><!-- wp:shortcode -->[ndk_converter]<!-- /wp:shortcode -->' ) ); wp_insert_post( array( 'post_status' => 'publish', 'post_title' => 'नमूना समाचार: मिति नेपालीमा', 'post_content' => 'यो पोस्टको मिति विक्रम संवत्मा देखिन्छ।' ) );"
+  }
+ ]
+}
